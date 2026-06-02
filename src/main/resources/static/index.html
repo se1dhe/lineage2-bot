@@ -10,23 +10,31 @@
 </head>
 <body>
 <main class="shell">
-    <section class="topbar">
+    <section class="topbar" aria-label="Craft workspace header">
         <div>
-            <h1>Крафт</h1>
-            <p id="subtitle">Lineage 2 recipe tree</p>
+            <span class="eyebrow">Dwarven workshop</span>
+            <h1>Craft Ledger</h1>
+            <p id="subtitle">Каталог снаряжения, дерево рецептов и учет ресурсов.</p>
         </div>
         <label class="search">
-            <span>Search</span>
+            <span>Поиск</span>
             <input id="search" type="search" placeholder="Sword, Tallum, Soulshot">
         </label>
     </section>
 
-    <nav id="grades" class="grades" aria-label="Grades"></nav>
+    <section class="control-strip" aria-label="Catalog filters">
+        <nav id="categories" class="segmented" aria-label="Item category"></nav>
+        <nav id="grades" class="grades" aria-label="Grades"></nav>
+        <button id="bookmarkView" class="tool-button" type="button" aria-pressed="false">
+            <span class="icon-mark" aria-hidden="true">☆</span>
+            Закладки
+        </button>
+    </section>
 
     <section class="layout">
         <aside class="panel list-panel">
             <div class="panel-head">
-                <strong>Рецепты</strong>
+                <strong id="recipeListTitle">Рецепты</strong>
                 <span id="recipeCount">0</span>
             </div>
             <div id="recipes" class="recipes"></div>
@@ -34,10 +42,31 @@
 
         <section class="panel tree-panel">
             <div class="panel-head">
-                <strong id="treeTitle">Дерево крафта</strong>
-                <input id="count" type="number" min="1" value="1">
+                <div>
+                    <strong id="treeTitle">Дерево крафта</strong>
+                    <span id="treeMeta" class="panel-subtitle">Выберите предмет</span>
+                </div>
+                <div class="tree-actions">
+                    <label class="count-label">
+                        <span>Кол-во</span>
+                        <input id="count" type="number" min="1" value="1">
+                    </label>
+                    <button id="bookmarkToggle" class="icon-button" type="button" aria-label="Добавить в закладки" disabled>☆</button>
+                </div>
             </div>
-            <div id="tree" class="tree empty">Выберите предмет слева</div>
+            <div class="workbench">
+                <div id="tree" class="tree empty">Выберите предмет слева</div>
+                <aside class="ledger" aria-label="Resource ledger">
+                    <div class="ledger-head">
+                        <div>
+                            <strong>Недостает</strong>
+                            <span id="ledgerMeta">0 позиций</span>
+                        </div>
+                        <button id="sendMissing" class="send-button" type="button" disabled>Отправить в Telegram</button>
+                    </div>
+                    <div id="shortageList" class="shortage-list empty">Здесь появится список ресурсов.</div>
+                </aside>
+            </div>
         </section>
     </section>
 </main>

@@ -107,6 +107,18 @@ public class TelegramBotService {
         post("/sendMessage", Map.of("chat_id", chatId, "text", text));
     }
 
+    public void sendMissingReport(long chatId, String text) {
+        if (!telegram.enabled()) {
+            throw new IllegalStateException("Telegram bot token is empty.");
+        }
+        String safeText = text == null || text.isBlank() ? "Список ресурсов пуст." : text;
+        post("/sendMessage", Map.of(
+                "chat_id", chatId,
+                "text", safeText,
+                "disable_web_page_preview", true
+        ));
+    }
+
     private void post(String method, Map<String, Object> payload) {
         try {
             client.post()

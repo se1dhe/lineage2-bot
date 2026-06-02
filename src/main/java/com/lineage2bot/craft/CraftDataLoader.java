@@ -16,9 +16,11 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @Component
@@ -30,6 +32,8 @@ public class CraftDataLoader {
     }
 
     public CraftData load() {
+        List<Recipe> recipes = loadRecipes();
+        Set<Integer> recipeItemIds = recipeItemIds(recipes);
         Map<Integer, Item> xmlItems = loadXmlItems();
         Map<Integer, Item> wikiItems = loadWikiItems();
         Map<Integer, Item> mergedItems = new LinkedHashMap<>(xmlItems);
@@ -42,14 +46,24 @@ public class CraftDataLoader {
                 choose(enriched.typeSlot(), xml.typeSlot()),
                 choose(enriched.icon(), xml.icon())
         )));
+        mergedItems.keySet().retainAll(recipeItemIds);
 
-        List<Recipe> recipes = loadRecipes();
         Map<Integer, List<Recipe>> byProduct = new HashMap<>();
         for (Recipe recipe : recipes) {
             byProduct.computeIfAbsent(recipe.productItemId(), ignored -> new ArrayList<>()).add(recipe);
         }
         byProduct.values().forEach(list -> list.sort(Comparator.comparingInt(Recipe::successRate).reversed()));
         return new CraftData(Map.copyOf(mergedItems), List.copyOf(recipes), Map.copyOf(byProduct));
+    }
+
+    private Set<Integer> recipeItemIds(List<Recipe> recipes) {
+        Set<Integer> ids = new HashSet<>();
+        for (Recipe recipe : recipes) {
+            ids.add(recipe.recipeItemId());
+            ids.add(recipe.productItemId());
+            recipe.materials().forEach(material -> ids.add(material.itemId()));
+        }
+        return ids;
     }
 
     private Map<Integer, Item> loadXmlItems() {

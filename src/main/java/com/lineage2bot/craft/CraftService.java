@@ -18,12 +18,15 @@ public class CraftService {
         this.data = loader.load();
     }
 
-    public List<RecipeCard> recipes(String grade, String query) {
+    public List<RecipeCard> recipes(String grade, String category, String query) {
         String gradeFilter = normalize(grade);
+        String categoryFilter = normalize(category);
         String q = normalize(query);
         return data.recipes().stream()
                 .map(recipe -> card(recipe, data.items().get(recipe.productItemId())))
                 .filter(card -> card.item() != null)
+                .filter(card -> isCatalogItem(card.item()))
+                .filter(card -> categoryFilter.isBlank() || category(card.item()).equals(categoryFilter))
                 .filter(card -> gradeFilter.isBlank() || normalize(card.item().grade()).equals(gradeFilter))
                 .filter(card -> q.isBlank() || card.item().searchable().contains(q) || normalize(card.recipe().alias()).contains(q))
                 .sorted(Comparator
@@ -34,10 +37,13 @@ public class CraftService {
                 .toList();
     }
 
-    public List<GradeGroup> gradeGroups() {
+    public List<GradeGroup> gradeGroups(String category) {
+        String categoryFilter = normalize(category);
         Map<String, Long> counts = data.recipes().stream()
                 .map(recipe -> data.items().get(recipe.productItemId()))
-                .filter(item -> item != null && !item.grade().isBlank())
+                .filter(item -> item != null && isCatalogItem(item))
+                .filter(item -> categoryFilter.isBlank() || category(item).equals(categoryFilter))
+                .filter(item -> !item.grade().isBlank())
                 .collect(Collectors.groupingBy(Item::grade, Collectors.counting()));
 
         return counts.entrySet().stream()
@@ -73,7 +79,7 @@ public class CraftService {
     }
 
     private RecipeCard card(Recipe recipe, Item item) {
-        return new RecipeCard(item, RecipeSummary.from(recipe), recipe.productCount());
+        return new RecipeCard(item, RecipeSummary.from(recipe), recipe.productCount(), item == null ? "" : category(item));
     }
 
     private long divCeil(long value, long divisor) {
@@ -82,6 +88,29 @@ public class CraftService {
 
     private String normalize(String value) {
         return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
+    }
+
+    private boolean isCatalogItem(Item item) {
+        return switch (category(item)) {
+            case "weapon", "armor", "jewelry" -> true;
+            default -> false;
+        };
+    }
+
+    private String category(Item item) {
+        String main = normalize(item.typeMain());
+        String sub = normalize(item.typeSub());
+        String slot = normalize(item.typeSlot());
+        if (main.equals("weapon") && !sub.isBlank() && !sub.equals("misc.") && !sub.equals("none")) {
+            return "weapon";
+        }
+        if (main.equals("accessory")) {
+            return "jewelry";
+        }
+        if (main.equals("armor") && !slot.equals("shield") && !slot.equals("hair accessory") && !slot.equals("cloak") && !slot.equals("underwear")) {
+            return "armor";
+        }
+        return "other";
     }
 
     private int gradeRank(String grade) {
@@ -101,7 +130,7 @@ public class CraftService {
         };
     }
 
-    public record RecipeCard(Item item, RecipeSummary recipe, long productCount) {
+    public record RecipeCard(Item item, RecipeSummary recipe, long productCount, String category) {
     }
 
     public record GradeGroup(String grade, long count) {
