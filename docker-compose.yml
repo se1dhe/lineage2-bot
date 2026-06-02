@@ -1,0 +1,13 @@
+services:
+  lineage2-bot:
+    build: .
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      PORT: 8080
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:8080}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+    volumes:
+      - ./datapack:/app/datapack:ro
+      - ./icons:/app/icons:ro
+      - ./wiki_items.db:/app/wiki_items.db:ro

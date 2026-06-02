@@ -1,0 +1,261 @@
+:root {
+    color-scheme: dark;
+    --bg: #111317;
+    --panel: #1b2027;
+    --panel-2: #222832;
+    --line: #313946;
+    --text: #f2f4f7;
+    --muted: #aab2bf;
+    --accent: #d6a84f;
+    --accent-2: #73b7df;
+    --danger: #dd756f;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    letter-spacing: 0;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+.shell {
+    width: min(1220px, 100%);
+    margin: 0 auto;
+    padding: 18px;
+}
+
+.topbar {
+    display: grid;
+    grid-template-columns: 1fr minmax(240px, 420px);
+    gap: 16px;
+    align-items: end;
+    margin-bottom: 14px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1;
+}
+
+p {
+    margin: 6px 0 0;
+    color: var(--muted);
+}
+
+.search {
+    display: grid;
+    gap: 6px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.search input,
+#count {
+    min-height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #15191f;
+    color: var(--text);
+    padding: 0 12px;
+    outline: none;
+}
+
+.grades {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 2px 0 14px;
+}
+
+.grade {
+    min-width: 58px;
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--text);
+    background: var(--panel);
+    cursor: pointer;
+}
+
+.grade.active {
+    border-color: var(--accent);
+    color: #1b1407;
+    background: var(--accent);
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(310px, 400px) 1fr;
+    gap: 14px;
+    align-items: start;
+}
+
+.panel {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel);
+    overflow: hidden;
+}
+
+.panel-head {
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px;
+    border-bottom: 1px solid var(--line);
+    background: var(--panel-2);
+}
+
+#recipeCount {
+    color: var(--muted);
+}
+
+#count {
+    width: 92px;
+}
+
+.recipes {
+    max-height: calc(100vh - 176px);
+    overflow: auto;
+}
+
+.recipe-card {
+    width: 100%;
+    min-height: 76px;
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: transparent;
+    color: var(--text);
+    padding: 10px 12px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.recipe-card:hover,
+.recipe-card.active {
+    background: #28313d;
+}
+
+.icon {
+    width: 44px;
+    height: 44px;
+    image-rendering: auto;
+    border-radius: 6px;
+    background: #0d1014;
+}
+
+.name {
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.meta {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.badge {
+    min-width: 34px;
+    height: 28px;
+    border-radius: 6px;
+    display: inline-grid;
+    place-items: center;
+    color: #14171b;
+    background: var(--accent-2);
+    font-weight: 800;
+    font-size: 12px;
+}
+
+.tree-panel {
+    min-height: 520px;
+}
+
+.tree {
+    padding: 14px;
+    overflow: auto;
+    max-height: calc(100vh - 176px);
+}
+
+.empty {
+    color: var(--muted);
+}
+
+.node {
+    position: relative;
+    margin-left: 22px;
+    padding-left: 18px;
+    border-left: 1px solid var(--line);
+}
+
+.node.root {
+    margin-left: 0;
+}
+
+.node-card {
+    display: grid;
+    grid-template-columns: 42px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    min-width: 280px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 0 10px;
+    padding: 9px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #171b21;
+}
+
+.node-card .icon {
+    width: 38px;
+    height: 38px;
+}
+
+.count {
+    color: var(--accent);
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.leaf .node-card {
+    border-color: #3f4c5e;
+}
+
+.leaf-label {
+    color: var(--danger);
+}
+
+@media (max-width: 820px) {
+    .shell {
+        padding: 12px;
+    }
+
+    .topbar,
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .recipes,
+    .tree {
+        max-height: none;
+    }
+}

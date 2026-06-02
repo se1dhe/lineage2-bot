@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Craft Calculator</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+<main class="shell">
+    <section class="topbar">
+        <div>
+            <h1>Крафт</h1>
+            <p id="subtitle">Lineage 2 recipe tree</p>
+        </div>
+        <label class="search">
+            <span>Search</span>
+            <input id="search" type="search" placeholder="Sword, Tallum, Soulshot">
+        </label>
+    </section>
+
+    <nav id="grades" class="grades" aria-label="Grades"></nav>
+
+    <section class="layout">
+        <aside class="panel list-panel">
+            <div class="panel-head">
+                <strong>Рецепты</strong>
+                <span id="recipeCount">0</span>
+            </div>
+            <div id="recipes" class="recipes"></div>
+        </aside>
+
+        <section class="panel tree-panel">
+            <div class="panel-head">
+                <strong id="treeTitle">Дерево крафта</strong>
+                <input id="count" type="number" min="1" value="1">
+            </div>
+            <div id="tree" class="tree empty">Выберите предмет слева</div>
+        </section>
+    </section>
+</main>
+
+<script src="/app.js"></script>
+</body>
+</html>

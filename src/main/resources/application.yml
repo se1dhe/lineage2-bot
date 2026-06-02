@@ -1,0 +1,13 @@
+server:
+  port: ${PORT:8080}
+
+app:
+  public-url: ${PUBLIC_URL:http://localhost:8080}
+  data:
+    recipes-path: ${RECIPES_PATH:datapack/aCis/data/xml/recipes.xml}
+    items-dir: ${ITEMS_DIR:datapack/aCis/data/xml/items}
+    wiki-db-path: ${WIKI_DB_PATH:wiki_items.db}
+    icons-dir: ${ICONS_DIR:icons}
+
+telegram:
+  bot-token: ${TELEGRAM_BOT_TOKEN:}

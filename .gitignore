@@ -1,0 +1,7 @@
+target/
+.mvn/
+.DS_Store
+**/.DS_Store
+.playwright-mcp/
+craft-app.png
+*.log

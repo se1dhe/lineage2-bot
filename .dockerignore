@@ -1,0 +1,6 @@
+target
+.mvn
+.git
+.DS_Store
+**/.DS_Store
+.playwright-mcp
