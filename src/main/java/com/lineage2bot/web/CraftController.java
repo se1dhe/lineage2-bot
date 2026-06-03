@@ -46,6 +46,15 @@ public class CraftController {
         return craftService.tree(itemId, count);
     }
 
+    @GetMapping("/tree/recipe/{recipeId}")
+    public CraftNode treeByRecipe(@PathVariable int recipeId, @RequestParam(defaultValue = "1") long count) {
+        try {
+            return craftService.treeByRecipe(recipeId, count);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
     @PostMapping("/telegram/missing")
     public Map<String, Boolean> sendMissing(@RequestBody MissingRequest request) {
         try {

@@ -6,6 +6,7 @@ import java.util.Map;
 public record CraftData(
         Map<Integer, Item> items,
         List<Recipe> recipes,
+        Map<Integer, Recipe> recipesById,
         Map<Integer, List<Recipe>> recipesByProduct
 ) {
 }

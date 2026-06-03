@@ -49,11 +49,13 @@ public class CraftDataLoader {
         mergedItems.keySet().retainAll(recipeItemIds);
 
         Map<Integer, List<Recipe>> byProduct = new HashMap<>();
+        Map<Integer, Recipe> byId = new HashMap<>();
         for (Recipe recipe : recipes) {
+            byId.put(recipe.id(), recipe);
             byProduct.computeIfAbsent(recipe.productItemId(), ignored -> new ArrayList<>()).add(recipe);
         }
         byProduct.values().forEach(list -> list.sort(Comparator.comparingInt(Recipe::successRate).reversed()));
-        return new CraftData(Map.copyOf(mergedItems), List.copyOf(recipes), Map.copyOf(byProduct));
+        return new CraftData(Map.copyOf(mergedItems), List.copyOf(recipes), Map.copyOf(byId), Map.copyOf(byProduct));
     }
 
     private Set<Integer> recipeItemIds(List<Recipe> recipes) {

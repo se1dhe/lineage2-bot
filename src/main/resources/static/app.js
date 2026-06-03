@@ -26,6 +26,7 @@ const state = {
   grade: "",
   q: "",
   selected: null,
+  selectedRecipe: null,
   selectedCard: null,
   selectedTree: null,
   recipes: [],
@@ -125,6 +126,7 @@ function initControls() {
     state.bookmarkMode = false;
     state.selectedCard = null;
     state.selected = null;
+    state.selectedRecipe = null;
     state.selectedTree = null;
     haptic();
     syncBookmarkMode();
@@ -260,6 +262,7 @@ function renderRecipes() {
 function selectRecipe(card) {
   state.selectedCard = card;
   state.selected = card.item.id;
+  state.selectedRecipe = card.recipe.id;
   state.collapsed.clear();
   els.treeTitle.textContent = card.item.name;
   els.treeMeta.textContent = `${gradeLabel(card.item.grade)} · ${card.item.typeSub || card.item.typeMain || "Item"}`;
@@ -292,7 +295,9 @@ function showDetail() {
 
 async function loadTree(itemId) {
   const count = Math.max(1, Number(els.count.value || 1));
-  state.selectedTree = await api(`/api/craft/tree/${itemId}?count=${count}`);
+  const recipeId = state.selectedRecipe;
+  const path = recipeId ? `/api/craft/tree/recipe/${recipeId}` : `/api/craft/tree/${itemId}`;
+  state.selectedTree = await api(`${path}?count=${count}`);
   renderTree();
 }
 

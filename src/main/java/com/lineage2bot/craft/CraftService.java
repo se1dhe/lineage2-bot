@@ -56,6 +56,14 @@ public class CraftService {
         return tree(itemId, Math.max(1, count), new HashSet<>());
     }
 
+    public CraftNode treeByRecipe(int recipeId, long count) {
+        Recipe recipe = data.recipesById().get(recipeId);
+        if (recipe == null) {
+            throw new IllegalArgumentException("Recipe " + recipeId + " not found.");
+        }
+        return tree(recipe, Math.max(1, count), new HashSet<>());
+    }
+
     public Item item(int id) {
         return data.items().get(id);
     }
@@ -67,7 +75,12 @@ public class CraftService {
             return new CraftNode(item, count, false, null, List.of());
         }
 
-        Recipe recipe = recipes.getFirst();
+        return tree(recipes.getFirst(), count, path);
+    }
+
+    private CraftNode tree(Recipe recipe, long count, Set<Integer> path) {
+        int itemId = recipe.productItemId();
+        Item item = data.items().getOrDefault(itemId, new Item(itemId, "Item " + itemId, "", "", "", "", "/icons/etc_question_mark_i00.png"));
         long crafts = divCeil(count, recipe.productCount());
         Set<Integer> nextPath = new HashSet<>(path);
         nextPath.add(itemId);
