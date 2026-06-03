@@ -2,71 +2,75 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Craft Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+    <title>Lineage 2 Craft</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="/styles.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-<main class="shell">
-    <section class="topbar" aria-label="Craft workspace header">
+<main class="app-shell">
+    <header class="app-header">
         <div>
-            <span class="eyebrow">Dwarven workshop</span>
-            <h1>Craft Ledger</h1>
-            <p id="subtitle">Каталог снаряжения, дерево рецептов и учет ресурсов.</p>
+            <span class="kicker">Lineage 2</span>
+            <h1>Крафт</h1>
         </div>
-        <label class="search">
-            <span>Поиск</span>
-            <input id="search" type="search" placeholder="Sword, Tallum, Soulshot">
-        </label>
-    </section>
-
-    <section class="control-strip" aria-label="Catalog filters">
-        <nav id="categories" class="segmented" aria-label="Item category"></nav>
-        <nav id="grades" class="grades" aria-label="Grades"></nav>
-        <button id="bookmarkView" class="tool-button" type="button" aria-pressed="false">
-            <span class="icon-mark" aria-hidden="true">☆</span>
-            Закладки
+        <button id="bookmarkView" class="icon-action" type="button" aria-label="Закладки" aria-pressed="false">
+            <span aria-hidden="true">☆</span>
         </button>
+    </header>
+
+    <section id="catalogView" class="view active" aria-label="Каталог крафта">
+        <div class="sticky-controls">
+            <label class="search-field">
+                <span class="sr-only">Поиск</span>
+                <input id="search" type="search" placeholder="Поиск предмета" autocomplete="off">
+            </label>
+            <nav id="categories" class="segmented" aria-label="Тип предмета"></nav>
+            <nav id="grades" class="grade-row" aria-label="Грейд"></nav>
+        </div>
+
+        <div class="list-meta">
+            <strong id="recipeListTitle">Рецепты</strong>
+            <span id="recipeCount">0</span>
+        </div>
+        <div id="recipes" class="recipe-list"></div>
     </section>
 
-    <section class="layout">
-        <aside class="panel list-panel">
-            <div class="panel-head">
-                <strong id="recipeListTitle">Рецепты</strong>
-                <span id="recipeCount">0</span>
+    <section id="detailView" class="view detail-view" aria-label="Дерево крафта">
+        <div class="detail-head">
+            <button id="fallbackBack" class="icon-action back-fallback" type="button" aria-label="Назад">
+                <span aria-hidden="true">‹</span>
+            </button>
+            <img id="selectedIcon" class="detail-icon" src="" alt="">
+            <div class="detail-title">
+                <strong id="treeTitle">Дерево крафта</strong>
+                <span id="treeMeta">Выберите предмет</span>
             </div>
-            <div id="recipes" class="recipes"></div>
-        </aside>
+            <button id="bookmarkToggle" class="icon-action" type="button" aria-label="Добавить в закладки" disabled>
+                <span aria-hidden="true">☆</span>
+            </button>
+        </div>
 
-        <section class="panel tree-panel">
-            <div class="panel-head">
-                <div>
-                    <strong id="treeTitle">Дерево крафта</strong>
-                    <span id="treeMeta" class="panel-subtitle">Выберите предмет</span>
-                </div>
-                <div class="tree-actions">
-                    <label class="count-label">
-                        <span>Кол-во</span>
-                        <input id="count" type="number" min="1" value="1">
-                    </label>
-                    <button id="bookmarkToggle" class="icon-button" type="button" aria-label="Добавить в закладки" disabled>☆</button>
-                </div>
+        <div class="craft-controls">
+            <label class="qty-field">
+                <span>Кол-во</span>
+                <input id="count" type="number" min="1" inputmode="numeric" value="1">
+            </label>
+            <div class="shortage-chip">
+                <span>Не хватает</span>
+                <strong id="ledgerMeta">0</strong>
             </div>
-            <div class="workbench">
-                <div id="tree" class="tree empty">Выберите предмет слева</div>
-                <aside class="ledger" aria-label="Resource ledger">
-                    <div class="ledger-head">
-                        <div>
-                            <strong>Недостает</strong>
-                            <span id="ledgerMeta">0 позиций</span>
-                        </div>
-                        <button id="sendMissing" class="send-button" type="button" disabled>Отправить в Telegram</button>
-                    </div>
-                    <div id="shortageList" class="shortage-list empty">Здесь появится список ресурсов.</div>
-                </aside>
+        </div>
+
+        <div id="tree" class="tree empty">Выберите предмет в каталоге</div>
+
+        <section class="shortage-panel" aria-label="Недостающие ресурсы">
+            <div class="section-head">
+                <strong>Ресурсы</strong>
+                <button id="sendMissing" class="inline-send" type="button" disabled>Отправить</button>
             </div>
+            <div id="shortageList" class="shortage-list empty">Здесь появится список ресурсов.</div>
         </section>
     </section>
 </main>

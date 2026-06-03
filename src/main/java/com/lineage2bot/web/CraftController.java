@@ -3,6 +3,8 @@ package com.lineage2bot.web;
 import com.lineage2bot.craft.CraftNode;
 import com.lineage2bot.craft.CraftService;
 import com.lineage2bot.telegram.TelegramBotService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,10 +48,17 @@ public class CraftController {
 
     @PostMapping("/telegram/missing")
     public Map<String, Boolean> sendMissing(@RequestBody MissingRequest request) {
-        telegramBotService.sendMissingReport(request.chatId(), request.text());
+        try {
+            long userId = telegramBotService.verifiedUserId(request.initData());
+            telegramBotService.sendMissingReport(userId, request.text());
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
+        } catch (IllegalStateException e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), e);
+        }
         return Map.of("ok", true);
     }
 
-    public record MissingRequest(long chatId, String text) {
+    public record MissingRequest(String initData, String text) {
     }
 }
